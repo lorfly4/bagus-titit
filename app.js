@@ -1,7 +1,8 @@
-const express = require('express');
+const express = require('express')
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const usersRoute = require('./routes/users');
+const usersSubject = require('./routes/subject');
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Menggunakan route untuk pengguna
 app.use('/', usersRoute);
+app.use('/api', usersSubject);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Home Page');

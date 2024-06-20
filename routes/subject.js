@@ -42,4 +42,32 @@ router.get('/subjects', (req, res) => {
   });
 });
 
+// Endpoint untuk mencatat klik pada mata pelajaran
+router.post('/subjects/:id/click', (req, res) => {
+  const subjectId = req.params.id;
+
+  // Validasi keberadaan subjectId
+  connection.query('SELECT * FROM subjects WHERE id = ?', [subjectId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Subject not found' });
+    }
+
+    // Contoh userId, ini bisa diambil dari sesi pengguna atau token
+    const userId = 1;
+    const activity = `User completed subject ${results[0].name}`;
+
+    // Log aktivitas
+    logActivity(userId, activity, (err) => {
+      if (err) {
+        return res.status(500).json({ error: err });
+      }
+
+      res.status(200).json({ message: 'Activity logged', subject: results[0] });
+    });
+  });
+});
+
 module.exports = router;
